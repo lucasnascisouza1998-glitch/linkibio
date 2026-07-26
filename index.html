@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lucas | PCD Freaky</title>
+
+<style>
+  /* ===== VARIÁVEIS DE COR (fácil de editar) ===== */
+  :root {
+    --cor-preto: #070707;
+    --cor-vermelho: #e50914;
+    --cor-vermelho-brilho: rgba(229, 9, 20, 0.55);
+    --cor-branco: #ffffff;
+    --cor-cinza-claro: rgba(255, 255, 255, 0.7);
+    --card-bg: rgba(255, 255, 255, 0.06);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --radius: 15px;
+    --transicao: 0.3s ease;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    width: 100%;
+    min-height: 100%;
+    background: var(--cor-preto);
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    color: var(--cor-branco);
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ===== FUNDO EM TELA CHEIA ===== */
+  .bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+  }
+
+  .bg-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* Gradiente escurecedor + brilho radial vermelho no topo */
+  .bg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+      background:
+  radial-gradient(circle at 50% 0%, var(--cor-vermelho-brilho) 0%, rgba(229,9,20,0) 40%),
+  linear-gradient(to bottom, rgba(7,7,7,0.55) 0%, rgba(7,7,7,0.85) 45%, rgba(7,7,7,0.97) 100%);
+  
+  }
+
+  /* ===== CONTAINER PRINCIPAL ===== */
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 48px 20px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ===== ANIMAÇÃO DE ENTRADA ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s forwards ease;
+  }
+
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Delays escalonados */
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.3s; }
+  .delay-4 { animation-delay: 0.4s; }
+  .delay-5 { animation-delay: 0.5s; }
+  .delay-6 { animation-delay: 0.6s; }
+  .delay-7 { animation-delay: 0.7s; }
+  .delay-8 { animation-delay: 0.8s; }
+  .delay-9 { animation-delay: 0.9s; }
+
+  /* ===== PERFIL ===== */
+  .perfil-foto-wrapper {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    padding: 3px;
+    background: var(--cor-vermelho);
+    box-shadow: 0 0 25px var(--cor-vermelho-brilho);
+    margin-bottom: 16px;
+  }
+
+  .perfil-foto {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--cor-preto);
+  }
+
+  .perfil-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  .nome-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .nome {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .selo-verificado {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .bio {
+    text-align: center;
+    color: var(--cor-cinza-claro);
+    font-size: 14px;
+    max-width: 320px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  /* ===== BOTÃO PRINCIPAL (WHATSAPP) ===== */
+  .cta-principal {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--cor-vermelho);
+    color: var(--cor-branco);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.35);
+    transition: transform var(--transicao), box-shadow var(--transicao);
+  }
+
+  .cta-principal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 28px rgba(229, 9, 20, 0.55);
+  }
+
+  .cta-principal svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  /* ===== CARDS DE REDES SOCIAIS ===== */
+  .lista-redes {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 36px;
+  }
+
+  .card-rede {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    text-decoration: none;
+    color: var(--cor-branco);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform var(--transicao), border-color var(--transicao), box-shadow var(--transicao);
+  }
+
+  .card-rede:hover {
+    transform: translateY(-4px);
+    border-color: var(--cor-vermelho);
+    box-shadow: 0 6px 20px var(--cor-vermelho-brilho);
+  }
+
+  .icone-rede {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+  }
+
+  .icone-rede svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .card-rede-texto {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card-rede-titulo {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .card-rede-subtitulo {
+    font-size: 13px;
+    color: var(--cor-cinza-claro);
+  }
+
+  /* Cores de fundo dos ícones */
+  .bg-whatsapp { background: #25D366; }
+  .bg-instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .bg-tiktok { background: #000000; border: 1px solid rgba(255,255,255,0.15); }
+  .bg-youtube { background: #FF0000; }
+
+  /* ===== SEÇÃO PARCEIROS ===== */
+  .secao-titulo {
+    width: 100%;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--cor-cinza-claro);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+
+  .parceiros-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 30px;
+  }
+
+  .card-parceiro {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform var(--transicao), border-color var(--transicao), box-shadow var(--transicao);
+  }
+
+  .card-parceiro:hover {
+    transform: translateY(-4px);
+    border-color: var(--cor-vermelho);
+    box-shadow: 0 6px 20px var(--cor-vermelho-brilho);
+  }
+
+  .parceiro-nome {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .parceiro-descricao {
+    font-size: 13px;
+    color: var(--cor-cinza-claro);
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .cupom-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1.5px dashed var(--cor-vermelho);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+  }
+
+  .cupom-codigo {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--cor-branco);
+  }
+
+  .btn-copiar {
+    background: var(--cor-vermelho);
+    color: var(--cor-branco);
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transicao), transform 0.15s ease;
+    min-width: 78px;
+  }
+
+  .btn-copiar:hover {
+    background: #ff1a25;
+  }
+
+  .btn-copiar:active {
+    transform: scale(0.95);
+  }
+
+  .btn-visitar {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: transparent;
+    border: 1.5px solid var(--cor-branco);
+    color: var(--cor-branco);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 12px;
+    border-radius: 10px;
+    transition: background var(--transicao), border-color var(--transicao);
+  }
+
+  .btn-visitar:hover {
+    background: var(--cor-vermelho);
+    border-color: var(--cor-vermelho);
+  }
+
+  /* ===== RODAPÉ ===== */
+  footer {
+    color: var(--cor-cinza-claro);
+    font-size: 12px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 380px) {
+    .container { padding: 36px 16px 24px; }
+    .perfil-foto-wrapper { width: 100px; height: 100px; }
+    .nome { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== FUNDO ===== -->
+  <div class="bg-container">
+    <img src="fundo.jpg" alt="Fundo">
+  </div>
+  <div class="bg-overlay"></div>
+
+  <div class="container">
+
+    <!-- ===== PERFIL ===== -->
+    <div class="perfil-foto-wrapper fade-in delay-1">
+      <div class="perfil-foto">
+        <img src="perfil.jpg" alt="Foto de perfil de Lucas">
+      </div>
+    </div>
+
+    <div class="nome-wrapper fade-in delay-2">
+      <span class="nome">Lucas | PCD Freaky</span>
+      <svg class="selo-verificado" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L14.09 4.26L17.14 3.5L17.9 6.55L21 8L19.74 11L21 14L17.9 15.45L17.14 18.5L14.09 17.74L12 20L9.91 17.74L6.86 18.5L6.1 15.45L3 14L4.26 11L3 8L6.1 6.55L6.86 3.5L9.91 4.26L12 2Z" fill="#e50914"/>
+        <path d="M9 12L11 14L15.5 9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="bio fade-in delay-3">Conteúdo, consultoria e performance sem enrolação.</p>
+
+    <!-- ===== BOTÃO PRINCIPAL WHATSAPP ===== -->
+    <a href="https://wa.me/message/ZSJPYSBVUGI6L1" target="_blank" rel="noopener noreferrer" class="cta-principal fade-in delay-4">
+      <svg viewBox="0 0 24 24" fill="white">
+        <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 5.83 2.42 8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.21-8.24 8.21zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.4-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.51.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+      </svg>
+      Fale com o Freaky Team
+    </a>
+
+    <!-- ===== LISTA DE REDES SOCIAIS ===== -->
+    <div class="lista-redes">
+
+      <!-- WhatsApp -->
+      <a href="https://wa.me/message/ZSJPYSBVUGI6L1" target="_blank" rel="noopener noreferrer" class="card-rede fade-in delay-5">
+        <div class="icone-rede bg-whatsapp">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.29-1.39a9.9 9.9 0 0 0 4.75 1.21h.01c5.46 0 9.9-4.45 9.9-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm0 18.13h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.36c0-4.54 3.7-8.24 8.25-8.24a8.2 8.2 0 0 1 5.83 2.42 8.19 8.19 0 0 1 2.41 5.83c0 4.55-3.7 8.21-8.24 8.21zm4.52-6.16c-.25-.12-1.47-.72-1.7-.81-.23-.08-.4-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.84-.86 2.05 0 1.21.88 2.38 1 2.54.12.17 1.73 2.64 4.2 3.7.59.25 1.05.4 1.41.51.59.19 1.13.16 1.55.1.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.11-.23-.17-.48-.29z"/>
+          </svg>
+        </div>
+        <div class="card-rede-texto">
+          <span class="card-rede-titulo">WhatsApp</span>
+          <span class="card-rede-subtitulo">Fale com a Freaky Team</span>
+        </div>
+      </a>
+
+      <!-- Instagram -->
+      <a href="https://www.instagram.com/pcdfreaky/" target="_blank" rel="noopener noreferrer" class="card-rede fade-in delay-6">
+        <div class="icone-rede bg-instagram">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="2" y="2" width="20" height="20" rx="6" stroke="white" stroke-width="2"/>
+            <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/>
+            <circle cx="17.5" cy="6.5" r="1.3" fill="white"/>
+          </svg>
+        </div>
+        <div class="card-rede-texto">
+          <span class="card-rede-titulo">Instagram</span>
+          <span class="card-rede-subtitulo">@pcdfreaky</span>
+        </div>
+      </a>
+
+      <!-- TikTok -->
+      <a href="https://www.tiktok.com/@pcdfreaky" target="_blank" rel="noopener noreferrer" class="card-rede fade-in delay-7">
+        <div class="icone-rede bg-tiktok">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path d="M16.5 2h-3v13.2a2.7 2.7 0 1 1-2-2.6V9.4a5.9 5.9 0 1 0 5 5.83V8.6a6.9 6.9 0 0 0 4 1.28V6.7a4 4 0 0 1-4-4.7z"/>
+          </svg>
+        </div>
+        <div class="card-rede-texto">
+          <span class="card-rede-titulo">TikTok</span>
+          <span class="card-rede-subtitulo">@pcdfreaky</span>
+        </div>
+      </a>
+
+      <!-- YouTube -->
+      <a href="https://www.youtube.com/@pcdfreaky" target="_blank" rel="noopener noreferrer" class="card-rede fade-in delay-8">
+        <div class="icone-rede bg-youtube">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path d="M22 12s0-3.2-.4-4.7a2.8 2.8 0 0 0-2-2C17.9 5 12 5 12 5s-5.9 0-7.6.3a2.8 2.8 0 0 0-2 2C2 8.8 2 12 2 12s0 3.2.4 4.7a2.8 2.8 0 0 0 2 2C6.1 19 12 19 12 19s5.9 0 7.6-.3a2.8 2.8 0 0 0 2-2C22 15.2 22 12 22 12z"/>
+            <path d="M10 15.5V8.5L16 12z" fill="#FF0000"/>
+          </svg>
+        </div>
+        <div class="card-rede-texto">
+          <span class="card-rede-titulo">YouTube</span>
+          <span class="card-rede-subtitulo">Lucas | PCD FREAKY</span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ===== SEÇÃO PARCEIROS ===== -->
+    <div class="secao-titulo fade-in delay-9">Meus Parceiros</div>
+
+    <div class="parceiros-container">
+
+      <!-- Dr. Peanut -->
+      <div class="card-parceiro fade-in delay-9">
+        <div class="parceiro-nome">Dr. Peanut</div>
+        <div class="parceiro-descricao">Maior marca nacional de Pasta de Amendoim.</div>
+        <div class="cupom-box">
+          <span class="cupom-codigo" id="cupom-peanut">DRLUCASSOUZAFIT</span>
+          <button class="btn-copiar" onclick="copiarCupom('DRLUCASSOUZAFIT', this)">Copiar</button>
+        </div>
+        <a href="https://www.drpeanut.com.br" target="_blank" rel="noopener noreferrer" class="btn-visitar">Visitar Dr. Peanut</a>
+      </div>
+
+      <!-- Olway -->
+      <div class="card-parceiro fade-in delay-9">
+        <div class="parceiro-nome">Olway</div>
+        <div class="parceiro-descricao">Melhores moletons e roupas fitness do Brasil.</div>
+        <div class="cupom-box">
+          <span class="cupom-codigo" id="cupom-olway">OLWAYLUCAS</span>
+          <button class="btn-copiar" onclick="copiarCupom('OLWAYLUCAS', this)">Copiar</button>
+        </div>
+        <a href="https://olway.com.br" target="_blank" rel="noopener noreferrer" class="btn-visitar">Visitar Olway</a>
+      </div>
+
+    </div>
+
+    <!-- ===== RODAPÉ ===== -->
+    <footer class="fade-in delay-9">© 2026 Lucas | PCD Freaky</footer>
+
+  </div>
+
+  <script>
+    // Copia o código do cupom para a área de transferência
+    // e exibe "Copiado" no botão por 2 segundos
+    function copiarCupom(codigo, botao) {
+      navigator.clipboard.writeText(codigo).then(function () {
+        var textoOriginal = botao.textContent;
+        botao.textContent = "Copiado";
+        setTimeout(function () {
+          botao.textContent = textoOriginal;
+        }, 2000);
+      }).catch(function () {
+        // Fallback caso o navegador bloqueie a API de clipboard
+        var input = document.createElement("textarea");
+        input.value = codigo;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+
+        var textoOriginal = botao.textContent;
+        botao.textContent = "Copiado";
+        setTimeout(function () {
+          botao.textContent = textoOriginal;
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>
